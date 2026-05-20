@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marvel Legendary Companion</title>
+    <style>
+        :root {
+            --marvel-red: #E23636;
+            --dark-blue: #06101E;
+            --card-bg: #112239;
+            --text-light: #F4F7FB;
+            --accent-gold: #FFD700;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--dark-blue);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #000 0%, var(--marvel-red) 100%);
+            padding: 40px 20px;
+            text-align: center;
+            border-bottom: 5px solid var(--accent-gold);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 3px 3px 0px #000;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            color: var(--accent-gold);
+            font-weight: bold;
+        }
+
+        nav {
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            padding: 10px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 20px;
+            margin: 0 10px;
+            text-transform: uppercase;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+            background-color: rgba(255,255,255,0.1);
+            border-radius: 4px;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        section {
+            margin-bottom: 5px;
+            padding: 40px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        h2 {
+            font-size: 2rem;
+            color: var(--marvel-red);
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-left: 5px solid var(--accent-gold);
+            padding-left: 15px;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+            margin-top: 20px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border: 2px solid #1e385c;
+            border-radius: 8px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--marvel-red);
+        }
+
+        .card h3 {
+            color: var(--accent-gold);
+            margin-bottom: 10px;
+            font-size: 1.4rem;
+        }
+
+        .card ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        .card li {
+            padding: 4px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .randomizer-box {
+            background: linear-gradient(145deg, #0d1f38, #162f52);
+            border: 3px dashed var(--accent-gold);
+            border-radius: 12px;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .player-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        .btn-player {
+            background-color: var(--card-bg);
+            color: white;
+            border: 2px solid var(--marvel-red);
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-player:hover {
+            background-color: var(--marvel-red);
+            box-shadow: 0 0 10px rgba(226,54,54,0.5);
+        }
+
+        .btn-player.active {
+            background-color: var(--marvel-red);
+            border-color: var(--accent-gold);
+            box-shadow: 0 0 15px var(--accent-gold);
+        }
+
+        .result-display {
+            margin-top: 25px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            text-align: left;
+        }
+
+        .result-group {
+            background-color: rgba(0,0,0,0.4);
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--marvel-red);
+        }
+
+        .result-group h4 {
+            color: var(--accent-gold);
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .result-group p {
+            font-size: 1.1rem;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            background-color: #030a14;
+            font-size: 0.9rem;
+            color: #667c99;
+            border-top: 1px solid #112239;
+        }
+
+        @media (max-width: 768px) {
+            .result-display {
+                grid-template-columns: 1fr;
+            }
+            h1 { font-size: 2.2rem; }
+            .player-buttons { gap: 8px; }
+            .btn-player { padding: 10px 16px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Marvel Legendary</h1>
+        <p>Deck Building Game Headquarters</p>
+    </header>
+
+    <nav>
+        <a href="#about">Overview</a>
+        <a href="#setup">Core Set Decks</a>
+        <a href="#randomizer">Setup Generator</a>
+    </nav>
+
+    <div class="container">
+        
+        <section id="about">
+            <h2>Game Overview</h2>
+            <p>Marvel Legendary is a cooperative deck-building game where players recruit powerful Marvel Super Heroes to defeat malicious Masterminds and foil their catastrophic Schemes. Work together to clear villains out of the city before they escape!</p>
+            
+            <div class="grid">
+                <div class="card">
+                    <h3>Recruit Heroes</h3>
+                    <p>Spend Recruit points to draft powerful heroes into your deck to gain specialized team mechanics and synergies.</p>
+                </div>
+                <div class="card">
+                    <h3>Fight Villains</h3>
+                    <p>Generate Attack power to defeat villains moving through the city streets and strike directly at the Mastermind.</p>
+                </div>
+                <div class="card">
+                    <h3>Stop Schemes</h3>
+                    <p>Every scenario features a unique Scheme deck variant that alters the rules and threatens an instant loss if unresolved.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="setup">
+            <h2>Classic Core Roster</h2>
+            <p>A quick look at the foundational challenges and all 15 heroes included in the base box edition.</p>
+            <div class="grid">
+                <div class="card">
+                    <h3>Masterminds</h3>
+                    <ul>
+                        <li>Magneto</li>
+                        <li>Loki</li>
+                        <li>Dr. Doom</li>
+                        <li>Red Skull</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>Villains & Henchmen</h3>
+                    <ul>
+                        <li>Hydra</li>
+                        <li>Skrulls</li>
+                        <li>Spider-Foes</li>
+                        <li>Masters of Evil</li>
+                        <li>Savage Land Mutants</li>
+                        <li>Hand Ninja / Doombots</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <h3>All 15 Heroes</h3>
+                    <ul style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px 15px;">
+                        <li>Black Widow</li>
+                        <li>Captain America</li>
+                        <li>Cyclops</li>
+                        <li>Deadpool</li>
+                        <li>Emma Frost</li>
+                        <li>Gambit</li>
+                        <li>Hawkeye</li>
+                        <li>Hulk</li>
+                        <li>Iron Man</li>
+                        <li>Nick Fury</li>
+                        <li>Rogue</li>
+                        <li>Spider-Man</li>
+                        <li>Storm</li>
+                        <li>Thor</li>
+                        <li>Wolverine</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="randomizer">
+            <h2>Match Setup Generator</h2>
+            <p style="margin-bottom: 20px;">Select your player count to automatically assemble a game using official scaling and leadership rules.</p>
+            
+            <div class="randomizer-box">
+                <div class="player-buttons">
+                    <button class="btn-player" onclick="generateSetup(1, this)">Solo</button>
+                    <button class="btn-player" onclick="generateSetup(2, this)">2 Players</button>
+                    <button class="btn-player" onclick="generateSetup(3, this)">3 Players</button>
+                    <button class="btn-player" onclick="generateSetup(4, this)">4 Players</button>
+                    <button class="btn-player" onclick="generateSetup(5, this)">5 Players</button>
+                </div>
+                
+                <div class="result-display" id="setupResults" style="display: none;">
+                    <div class="result-group">
+                        <h4>Threatening Mastermind</h4>
+                        <p id="resMastermind">-</p>
+                    </div>
+                    <div class="result-group">
+                        <h4>Evil Scheme</h4>
+                        <p id="resScheme">-</p>
+                    </div>
+                    <div class="result-group">
+                        <h4>Villain Groups</h4>
+                        <p id="resVillains">-</p>
+                    </div>
+                    <div class="result-group">
+                        <h4>Henchmen Group</h4>
+                        <p id="resHenchmen">-</p>
+                    </div>
+                    <div class="result-group">
+                        <h4>Bystanders in Villain Deck</h4>
+                        <p id="resBystanders" style="color: #ff4a4a;">-</p>
+                    </div>
+                    <div class="result-group">
+                        <h4>Scheme Twists Required</h4>
+                        <p id="resTwists">-</p>
+                    </div>
+                    <div class="result-group" style="grid-column: span 2;">
+                        <h4>Your Hero Deck Roster</h4>
+                        <p id="resHeroes" style="color: var(--accent-gold); font-size: 1.2rem;">-</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>This is an unofficial, community-made fan website. Marvel Legendary is published by Upper Deck Entertainment.</p>
+    </footer>
+
+    <script>
+        // Data Structures mapped with official "Always Leads" relationships
+        const mastermindData = [
+            { name: "Red Skull", leads: "Hydra" },
+            { name: "Loki", leads: "Enemies of Asgard" },
+            { name: "Dr. Doom", leads: "Doombots" }, // Classified under Henchmen but assigned dynamically
+            { name: "Magneto", leads: "Brotherhood" }
+        ];
+
+        const schemes = [
+            "The Legacy Virus", "Midtown Bank Robbery", "Unleash the Power of the Cosmic Cube", 
+            "Portal to another Dimension", "Super Hero Civil War", "Kill Bots"
+        ];
+        
+        const villainPool = ["Spider-Foes", "Hydra", "Masters of Evil", "Radiation", "Skrulls", "Enemies of Asgard", "Brotherhood"];
+        const henchmenPool = ["Savage Land Mutants", "Hand Ninja", "Doombots", "Sentinel"];
+        const heroes = [
+            "Black Widow", "Captain America", "Cyclops", "Deadpool", "Emma Frost", 
+            "Gambit", "Hawkeye", "Hulk", "Iron Man", "Nick Fury", 
+            "Rogue", "Spider-Man", "Storm", "Thor", "Wolverine"
+        ];
+
+        const layoutConfig = {
+            1: { heroes: 3, villains: 1, henchmen: 1, bystanders: 1, twists: 8 },
+            2: { heroes: 5, villains: 2, henchmen: 1, bystanders: 2, twists: 8 },
+            3: { heroes: 5, villains: 3, henchmen: 1, bystanders: 8, twists: 8 },
+            4: { heroes: 5, villains: 3, henchmen: 2, bystanders: 8, twists: 8 },
+            5: { heroes: 6, villains: 4, henchmen: 2, bystanders: 12, twists: 8 }
+        };
+
+        function getRandomItems(arr, count) {
+            let shuffled = [...arr].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, count);
+        }
+
+        function generateSetup(playerCount, buttonEl) {
+            document.querySelectorAll('.btn-player').forEach(btn => btn.classList.remove('active'));
+            buttonEl.classList.add('active');
+
+            const rules = layoutConfig[playerCount];
+            const selectedMastermindObj = mastermindData[Math.floor(Math.random() * mastermindData.length)];
+            const selectedScheme = getRandomItems(schemes, 1);
+            
+            let chosenVillains = [];
+            let chosenHenchmen = [];
+
+            // Execute Always Leads Logic based on player choices
+            if (playerCount === 1) {
+                // Solo game ignores Always Leads rules completely
+                chosenVillains = getRandomItems(villainPool, rules.villains);
+                chosenHenchmen = getRandomItems(henchmenPool, rules.henchmen);
+            } else {
+                // Multi-player games force the inclusion of the Mastermind's core faction
+                const leadsTarget = selectedMastermindObj.leads;
+
+                if (henchmenPool.includes(leadsTarget)) {
+                    // Scenario: Dr. Doom leads the Henchman Doombot group
+                    chosenHenchmen.push(leadsTarget);
+                    
+                    // Fill remaining slots normally from standard array pools
+                    let filteredHenchmenPool = henchmenPool.filter(h => h !== leadsTarget);
+                    let additionalHenchmen = getRandomItems(filteredHenchmenPool, rules.henchmen - 1);
+                    chosenHenchmen = chosenHenchmen.concat(additionalHenchmen);
+                    
+                    chosenVillains = getRandomItems(villainPool, rules.villains);
+                } else {
+                    // Scenario: Mastermind leads a standard Villain group
+                    chosenVillains.push(leadsTarget);
+                    
+                    let filteredVillainPool = villainPool.filter(v => v !== leadsTarget);
+                    let additionalVillains = getRandomItems(filteredVillainPool, rules.villains - 1);
+                    chosenVillains = chosenVillains.concat(additionalVillains);
+                    
+                    chosenHenchmen = getRandomItems(henchmenPool, rules.henchmen);
+                }
+            }
+
+            const selectedHeroes = getRandomItems(heroes, rules.heroes).join(" • ");
+
+            // Inject final parsed array values into layout engine
+            document.getElementById("resMastermind").innerText = selectedMastermindObj.name;
+            document.getElementById("resScheme").innerText = selectedScheme;
+            document.getElementById("resVillains").innerText = chosenVillains.join(", ");
+            document.getElementById("resHenchmen").innerText = chosenHenchmen.join(", ");
+            document.getElementById("resBystanders").innerText = rules.bystanders;
+            document.getElementById("resTwists").innerText = rules.twists;
+            document.getElementById("resHeroes").innerText = selectedHeroes;
+
+            document.getElementById("setupResults").style.display = "grid";
+        }
+    </script>
+</body>
+</html>
